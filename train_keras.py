@@ -13,7 +13,7 @@ environ['TF_ENABLE_AUTO_MIXED_PRECISION'] = '1';
 #environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices --tf_xla_auto_jit=2'
 #os.environ['TF_CPP_MIN_VLOG_LEVEL'] = '3';
 #os.environ['CUDA_VISIBLE_DEVICES'] = '';
-batch_size = 12; # images of different sizes can't be stack into a batch
+batch_size = 8; # images of different sizes can't be stack into a batch
 
 def main():
 
@@ -22,7 +22,7 @@ def main():
   loss2 = Loss((416,416,3,), 1, 80);
   loss3 = Loss((416,416,3,), 2, 80);
   if exists('./checkpoints/ckpt'): yolov4.load_weights('./checkpoints/ckpt/variables/variables');
-  optimizer = tf.keras.optimizers.Adam(1e-5);
+  optimizer = tf.keras.optimizers.Adam(1e-4);
   yolov4.compile(optimizer = optimizer, loss = {'output1': lambda labels, outputs: loss1([outputs, labels]),
                                                                      'output2': lambda labels, outputs: loss2([outputs, labels]),
                                                                      'output3': lambda labels, outputs: loss3([outputs, labels])});
