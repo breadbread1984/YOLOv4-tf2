@@ -13,7 +13,7 @@ environ['TF_ENABLE_AUTO_MIXED_PRECISION'] = '1';
 #environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices --tf_xla_auto_jit=2'
 #os.environ['TF_CPP_MIN_VLOG_LEVEL'] = '3';
 #os.environ['CUDA_VISIBLE_DEVICES'] = '';
-batch_size = 8; # images of different sizes can't be stack into a batch
+batch_size = 4; # images of different sizes can't be stack into a batch
 
 def main():
 
