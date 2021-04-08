@@ -5,7 +5,7 @@ from models import YOLOv4;
 
 def main():
 
-  yolov4 = YOLOv4((416, 416, 3), 80);
+  yolov4 = YOLOv4((608, 608, 3), 80);
   yolov4.load_weights('./checkpoints/ckpt/variables/variables');
   yolov4.save('yolov4.h5');
   yolov4.save_weights('yolov4_weights.h5');

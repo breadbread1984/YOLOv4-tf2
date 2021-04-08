@@ -5,7 +5,7 @@ from models import YOLOv4;
 
 def main():
 
-  yolov4 = YOLOv4((416, 416, 3), 80);
+  yolov4 = YOLOv4((608, 608, 3), 80);
   optimizer = tf.keras.optimizers.Adam(tf.keras.optimizers.schedules.ExponentialDecay(1e-4, decay_steps = 110000, decay_rate = 0.99));
   checkpoint = tf.train.Checkpoint(model = yolov4, optimizer = optimizer);
   checkpoint.restore(tf.train.latest_checkpoint('checkpoints'));

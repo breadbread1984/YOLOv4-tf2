@@ -64,7 +64,7 @@ def five_convblocks(input_shape, output_filters):
   results = ConvBlockLeakyReLU(results.shape[1:], filters = output_filters, kernel_size = (1,1))(results);
   return tf.keras.Model(inputs = inputs, outputs = results);
 
-def YOLOv4(input_shape = (416, 416, 3), class_num = 80, anchor_num = 3):
+def YOLOv4(input_shape = (608, 608, 3), class_num = 80, anchor_num = 3):
 
   inputs = tf.keras.Input(shape = input_shape);
   # NOTE: use different output network for each scale
@@ -239,6 +239,6 @@ if __name__ == "__main__":
   yolov4 = YOLOv4();
   yolov4.save('yolov4.h5');
   import numpy as np;
-  inputs = np.random.normal(size = (8, 416, 416 ,3));
+  inputs = np.random.normal(size = (8, 608, 608 ,3));
   large_predicts, middle_predicts, small_predicts = yolov4(inputs);
   print(large_predicts.shape, middle_predicts.shape, small_predicts.shape);

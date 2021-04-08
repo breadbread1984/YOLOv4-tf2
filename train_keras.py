@@ -17,10 +17,10 @@ batch_size = 8; # images of different sizes can't be stack into a batch
 
 def main():
 
-  yolov4 = YOLOv4((416,416,3,), 80);
-  loss1 = Loss((416,416,3,), 0, 80);
-  loss2 = Loss((416,416,3,), 1, 80);
-  loss3 = Loss((416,416,3,), 2, 80);
+  yolov4 = YOLOv4((608,608,3,), 80);
+  loss1 = Loss((608,608,3,), 0, 80);
+  loss2 = Loss((608,608,3,), 1, 80);
+  loss3 = Loss((608,608,3,), 2, 80);
   if exists('./checkpoints/ckpt'): yolov4.load_weights('./checkpoints/ckpt/variables/variables');
   optimizer = tf.keras.optimizers.Adam(1e-4);
   yolov4.compile(optimizer = optimizer, loss = {'output1': lambda labels, outputs: loss1([outputs, labels]),

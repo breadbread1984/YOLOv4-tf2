@@ -19,10 +19,10 @@ def main():
   gpus = tf.config.experimental.list_physical_devices('GPU');
   [tf.config.experimental.set_memory_growth(gpu, True) for gpu in gpus];
   # yolov4 model
-  yolov4 = YOLOv4((416,416,3), 80);
-  loss1 = Loss((416,416,3), 0, 80);
-  loss2 = Loss((416,416,3), 1, 80);
-  loss3 = Loss((416,416,3), 2, 80);
+  yolov4 = YOLOv4((608,608,3), 80);
+  loss1 = Loss((608,608,3), 0, 80);
+  loss2 = Loss((608,608,3), 1, 80);
+  loss3 = Loss((608,608,3), 2, 80);
   #optimizer = tf.keras.optimizers.Adam(tf.keras.optimizers.schedules.ExponentialDecay(1e-5, decay_steps = 110000, decay_rate = 0.99));
   optimizer = tf.keras.optimizers.Adam(1e-5);
   checkpoint = tf.train.Checkpoint(model = yolov4, optimizer = optimizer);

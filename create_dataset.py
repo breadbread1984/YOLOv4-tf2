@@ -13,7 +13,7 @@ import tensorflow as tf;
 PROCESS_NUM = 80;
 label_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, -1, 25, 26, -1, -1, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, -1, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, -1, 61, -1, -1, 62, -1, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, -1, 74, 75, 76, 77, 78, 79, 80];
 
-def parse_function_generator(num_classes, img_shape = (416,416), random = True, jitter = .3):
+def parse_function_generator(num_classes, img_shape = (608,608), random = True, jitter = .3):
   def parse_function(serialized_example):
     feature = tf.io.parse_single_example(
       serialized_example,
@@ -87,8 +87,8 @@ def parse_function_generator(num_classes, img_shape = (416,416), random = True, 
                                                                     [(h - tf.shape(x)[1])//2, (h - tf.shape(x)[1]) - (h - tf.shape(x)[1])//2],
                                                                     [(w - tf.shape(x)[2])//2, (w - tf.shape(x)[2]) - (w - tf.shape(x)[2])//2],
                                                                     [0,0]], constant_values = 128), 
-                                        arguments = {'h': img_shape[1], 'w': img_shape[0]})(resize_image); # resize_image.shape = (batch, 416, 416, 3)
-      final_image = tf.keras.layers.Lambda(lambda x: tf.cast(x, tf.float32))(pad_image); # image_data.shape = (batch, 416, 416, 3)
+                                        arguments = {'h': img_shape[1], 'w': img_shape[0]})(resize_image); # resize_image.shape = (batch, 608, 608, 3)
+      final_image = tf.keras.layers.Lambda(lambda x: tf.cast(x, tf.float32))(pad_image); # image_data.shape = (batch, 608, 608, 3)
       resize_bbox = tf.keras.layers.Lambda(lambda x: x[0] * tf.cast([[[tf.shape(x[1])[1], 
                                                                       tf.shape(x[1])[2], 
                                                                       tf.shape(x[1])[1], 
@@ -252,7 +252,7 @@ if __name__ == "__main__":
   trainset_filenames = [join('testset', filename) for filename in listdir('testset')];
   trainset = tf.data.TFRecordDataset(trainset_filenames).map(parse_function_generator(80));
   for image, labels in trainset:
-    image = image * 255.; # image.shape = (416, 416, 3)
+    image = image * 255.; # image.shape = (608, 608, 3)
     labels1, labels2, labels3 = labels; # labels1.shape = (13, 13, 3, 85) labels2.shape = (26, 26, 3, 85) labels3.shape = (52, 52, 3, 85)
     mask1 = tf.math.equal(labels1[..., 4], 1); # mask1.shape = (13, 13, 3)
     mask2 = tf.math.equal(labels2[..., 4], 1); # mask2.shape = (26, 26, 3)

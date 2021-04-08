@@ -11,7 +11,7 @@ class Predictor(object):
 
   anchors = {2: [[10, 13], [16, 30], [33, 23]], 1: [[30, 61], [62, 45], [59, 119]], 0: [[116, 90], [156, 198], [373, 326]]};
 
-  def __init__(self, input_shape = (416,416,3), class_num = 80, yolov4 = None):
+  def __init__(self, input_shape = (608,608,3), class_num = 80, yolov4 = None):
 
     if yolov4 is None:
       self.input_shape = input_shape;
