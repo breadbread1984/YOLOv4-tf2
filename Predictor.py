@@ -107,7 +107,7 @@ if __name__ == "__main__":
   if img is None:
     print("invalid image!");
     exit(1);
-  boundings = predictor.predict(img);
+  boundings = predictor.predict(img, 0.4, 0.4);
   color_map = dict();
   for bounding in boundings:
     if bounding[5].numpy().astype('int32') in color_map:
