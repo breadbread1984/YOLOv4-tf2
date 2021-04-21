@@ -18,8 +18,8 @@ label_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 12, 13, 14, 15, 16, 17, 1
 
 def main(argv):
 
-  yolov3 = tf.keras.models.load_model(FLAGS.model, compile = False);
-  predictor = Predictor(yolov3 = yolov3);
+  yolov4 = tf.keras.models.load_model(FLAGS.model, compile = False);
+  predictor = Predictor(yolov4 = yolov4);
   anno = COCO(join(FLAGS.annotation_dir, 'instances_val2017.json'));
   count = 0;
   for imgid in anno.getImgIds():
