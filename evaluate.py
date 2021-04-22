@@ -23,7 +23,7 @@ def main(argv):
   yolov4 = tf.keras.models.load_model(FLAGS.model, compile = False);
   predictor = Predictor(yolov4 = yolov4);
   anno = COCO(join(FLAGS.annotation_dir, 'instances_val2017.json'));
-  count = 0;
+  count = 1;
   for imgid in anno.getImgIds():
     print("processing (%d/%d)" % (count, len(anno.getImgIds())));
     detections = list();
@@ -41,7 +41,7 @@ def main(argv):
         if bounding[5].astype('int32') not in color_map:
           color_map[bounding[5].astype('int32')] = tuple(np.random.randint(low = 0, high = 256, size = (3,)).tolist());
         cv2.rectangle(img, tuple(bounding[0:2].astype('int32').tolist()), tuple(bounding[2:4].astype('int32').tolist()), color_map[bounding[5].astype('int32')], 1);
-        cv2.putText(img, list(filter(lambda x: x['id'] == label_map.index(int(bounding[5]) + 1), anno.dataset['categories']))[0]['name'], tuple(bounding[0:2].astype('int32').tolist()), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color_map[bounding[5].astype('int32')], 1);
+        cv2.putText(img, list(filter(lambda x: x['id'] == label_map.index(int(bounding[5]) + 1), anno.dataset['categories']))[0]['name'], tuple(bounding[0:2].astype('int32').tolist()), cv2.FONT_HERSHEY_PLAIN, 1, color_map[bounding[5].astype('int32')], 2);
     if debug_mode:
       annIds = anno.getAnnIds(imgIds = imgid);
       anns = anno.loadAnns(annIds);
@@ -50,7 +50,7 @@ def main(argv):
         if label_map[ann['category_id']] - 1 not in color_map:
           color_map[label_map[ann['category_id']] - 1] = tuple(np.random.randint(low = 0, high = 256, size = (3,)).tolist());
         cv2.rectangle(img_gt, (int(bbox_x), int(bbox_y), int(bbox_w), int(bbox_h)), color_map[label_map[ann['category_id']] - 1], 1);
-        cv2.putText(img_gt, list(filter(lambda x: x['id'] == ann['category_id'], anno.dataset['categories']))[0]['name'], (int(bbox_x), int(bbox_y)), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color_map[label_map[ann['category_id']] - 1], 1);
+        cv2.putText(img_gt, list(filter(lambda x: x['id'] == ann['category_id'], anno.dataset['categories']))[0]['name'], (int(bbox_x), int(bbox_y)), cv2.FONT_HERSHEY_PLAIN, 1, color_map[label_map[ann['category_id']] - 1], 2);
     if debug_mode:
       stacked = np.concatenate([img, img_gt], axis = 0)
       cv2.imshow('detect (up), ground truth (down)', stacked);
