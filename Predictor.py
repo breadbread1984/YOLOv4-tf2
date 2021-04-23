@@ -10,6 +10,7 @@ from models import YOLOv4, OutputParser;
 class Predictor(object):
 
   anchors = {2: [[10, 13], [16, 30], [33, 23]], 1: [[30, 61], [62, 45], [59, 119]], 0: [[116, 90], [156, 198], [373, 326]]};
+  classes = ["person","bicycle","car","motorbike","aeroplane","bus","train","truck","boat","trafficlight","firehydrant","stopsign","parkingmeter","bench","bird","cat","dog","horse","sheep","cow","elephant","bear","zebra","giraffe","backpack","umbrella","handbag","tie","suitcase","frisbee","skis","snowboard","sportsball","kite","baseballbat","baseballglove","skateboard","surfboard","tennisracket","bottle","wineglass","cup","fork","knife","spoon","bowl","banana","apple","sandwich","orange","broccoli","carrot","hotdog","pizza","donut","cake","chair","sofa","pottedplant","bed","diningtable","toilet","tvmonitor","laptop","mouse","remote","keyboard","cellphone","microwave","oven","toaster","sink","refrigerator","book","clock","vase","scissors","teddybear","hairdrier","toothbrush",];
 
   def __init__(self, input_shape = (608,608,3), class_num = 80, yolov4 = None):
 
@@ -96,6 +97,9 @@ class Predictor(object):
     boundings = tf.keras.layers.Concatenate(axis = -1)([upper_left, down_right, whole_targets[..., 4:]]);
     return boundings;
 
+  def getClsName(self, pred_cls):
+    return self.classes[pred_cls];
+
 if __name__ == "__main__":
 
   assert tf.executing_eagerly() == True;
@@ -110,12 +114,11 @@ if __name__ == "__main__":
   boundings = predictor.predict(img, 0.4, 0.4);
   color_map = dict();
   for bounding in boundings:
-    if bounding[5].numpy().astype('int32') in color_map:
-      clr = color_map[bounding[5].numpy().astype('int32')];
-    else:
+    if bounding[5].numpy().astype('int32') not in color_map:
       color_map[bounding[5].numpy().astype('int32')] = tuple(np.random.randint(low=0, high=256,size=(3,)).tolist());
-      clr = color_map[bounding[5].numpy().astype('int32')];
-    cv2.rectangle(img, tuple(bounding[0:2].numpy().astype('int32')), tuple(bounding[2:4].numpy().astype('int32')), clr, 2);
+    clr = color_map[bounding[5].numpy().astype('int32')];
+    cv2.rectangle(img, tuple(bounding[0:2].numpy().astype('int32')), tuple(bounding[2:4].numpy().astype('int32')), clr, 1);
+    cv2.putText(img, predictor.getClsName(bounding[5].numpy().astype('int32')), tuple(bounding[0:2].numpy().astype('int32')), cv2.FONT_HERSHEY_PLAIN, 1, clr, 2);
   cv2.imshow('people', img);
   cv2.waitKey();
 
