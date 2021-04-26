@@ -24,7 +24,7 @@ def main():
   loss1 = Loss((608,608,3,), 0, 80);
   loss2 = Loss((608,608,3,), 1, 80);
   loss3 = Loss((608,608,3,), 2, 80);
-  if exists('./checkpoints/ckpt'): yolov4.load_weights('./checkpoints/ckpt/variables/variables');
+  if exists('./checkpoints/ckpt'): yolov4.load_weights('./checkpoints/ckpt');
   optimizer = tf.keras.optimizers.Adam(1e-4);
   yolov4.compile(optimizer = optimizer, loss = {'output1': lambda labels, outputs: loss1([outputs, labels]),
                                                                      'output2': lambda labels, outputs: loss2([outputs, labels]),
