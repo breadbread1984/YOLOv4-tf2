@@ -2,6 +2,7 @@
 
 from os import environ, listdir;
 from os.path import join, exists;
+from math import ceil;
 import numpy as np;
 import cv2;
 import tensorflow as tf;
@@ -14,6 +15,8 @@ environ['TF_ENABLE_AUTO_MIXED_PRECISION'] = '1';
 #os.environ['TF_CPP_MIN_VLOG_LEVEL'] = '3';
 #os.environ['CUDA_VISIBLE_DEVICES'] = '';
 batch_size = 4; # images of different sizes can't be stack into a batch
+trainset_size = 118287;
+testset_size = 5000;
 
 def main():
 
@@ -36,7 +39,7 @@ def main():
     tf.keras.callbacks.TensorBoard(log_dir = './checkpoints'),
     tf.keras.callbacks.ModelCheckpoint(filepath = './checkpoints/ckpt', save_freq = 10000),
   ];
-  yolov4.fit(trainset, epochs = 100, validation_data = testset, callbacks = callbacks);
+  yolov4.fit(trainset, steps_per_epoch = ceil(trainset_size / batch_size), epochs = 100, validation_data = testset, validation_steps = ceil(testset_size / batch_size), callbacks = callbacks);
   yolov4.save('yolov4.h5');
 
 if __name__ == "__main__":
