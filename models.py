@@ -303,10 +303,11 @@ def Loss(img_shape, layer, class_num = 80, ignore_thresh = 0.5):
 
 if __name__ == "__main__":
 
+  tf.enable_eager_execution();
   assert tf.executing_eagerly();
   yolov4 = YOLOv4();
   yolov4.save('yolov4.h5');
   import numpy as np;
-  inputs = np.random.normal(size = (8, 608, 608 ,3));
+  inputs = np.random.normal(size = (8, 608, 608 ,3)).astype(np.float32);
   large_predicts, middle_predicts, small_predicts = yolov4(inputs);
   print(large_predicts.shape, middle_predicts.shape, small_predicts.shape);
