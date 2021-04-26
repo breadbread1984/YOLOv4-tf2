@@ -10,7 +10,7 @@ import numpy as np;
 import cv2;
 import tensorflow as tf;
 
-PROCESS_NUM = 80;
+PROCESS_NUM = 32;
 label_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, -1, 25, 26, -1, -1, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, -1, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, -1, 61, -1, -1, 62, -1, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, -1, 74, 75, 76, 77, 78, 79, 80];
 
 def parse_function_generator(num_classes, img_shape = (608,608), random = True, jitter = .3):
@@ -237,8 +237,8 @@ def worker(filename, anno, image_dir, image_ids):
     trainsample = tf.train.Example(features = tf.train.Features(
       feature = {
         'image': tf.train.Feature(bytes_list = tf.train.BytesList(value = [tf.io.encode_jpeg(img).numpy()])),
-        'bbox': tf.train.Feature(float_list = tf.train.FloatList(value = tf.reshape(bboxs, (-1)))),
-        'label': tf.train.Feature(int64_list = tf.train.Int64List(value = tf.reshape(labels, (-1)))),
+        'bbox': tf.train.Feature(float_list = tf.train.FloatList(value = tf.reshape(bboxs, (-1,)))),
+        'label': tf.train.Feature(int64_list = tf.train.Int64List(value = tf.reshape(labels, (-1,)))),
         'obj_num': tf.train.Feature(int64_list = tf.train.Int64List(value = [obj_num]))
       }
     ));
@@ -279,6 +279,7 @@ if __name__ == "__main__":
   if len(argv) != 4:
     print("Usage: " + argv[0] + "<train image dir> <test image dir> <anno dir>");
     exit(1);
+  tf.enable_eager_execution();
   assert tf.executing_eagerly() == True;
   create_dataset(argv[2], argv[3], False);
   create_dataset(argv[1], argv[3], True);
