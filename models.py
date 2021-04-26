@@ -143,7 +143,7 @@ def OutputParser(input_shape, img_shape, anchors):
   box_class_probs = tf.keras.layers.Lambda(lambda x: tf.math.sigmoid(x[..., 5:]))(feats);
   return tf.keras.Model(inputs = feats, outputs = (box_xy, box_wh, box_confidence, box_class_probs));
 
-def giou_loss(y_true, y_pred, mode = "giou"):
+def giou_loss_fn(y_true, y_pred, mode = "giou"):
     """Implements the GIoU loss function.
     GIoU loss was first introduced in the
     [Generalized Intersection over Union:
@@ -277,7 +277,7 @@ def Loss(img_shape, layer, class_num = 80, ignore_thresh = 0.5):
   # 4) position loss
   # NOTE: only punish foreground area
   # NOTE: punish smaller foreground targets more harshly
-  giou_loss = tf.keras.layers.Lambda(lambda x: x[0] * x[1] * giou_loss(x[2], x[3], mode = 'iou'))([object_mask, loss_scale, true_bbox, pred_bbox]); # giou_loss.shape = (batch, grid h, grid w, anchor_num)
+  giou_loss = tf.keras.layers.Lambda(lambda x: x[0] * x[1] * giou_loss_fn(x[2], x[3], mode = 'iou'))([object_mask, loss_scale, true_bbox, pred_bbox]); # giou_loss.shape = (batch, grid h, grid w, anchor_num)
   # 5) confidence loss
   # NOTE: punish foreground area which is miss classified
   # NOTE: and punish background area which is far from foreground area and miss classified
