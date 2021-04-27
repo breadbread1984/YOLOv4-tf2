@@ -306,7 +306,7 @@ if __name__ == "__main__":
   tf.enable_eager_execution();
   assert tf.executing_eagerly();
   yolov4 = YOLOv4();
-  yolov4.save('yolov4.h5');
+  yolov4.save_weights('yolov4_trained_weights', save_format = 'tf');
   import numpy as np;
   inputs = np.random.normal(size = (8, 608, 608 ,3)).astype(np.float32);
   large_predicts, middle_predicts, small_predicts = yolov4(inputs);
